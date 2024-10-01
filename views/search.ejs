@@ -1,0 +1,29 @@
+<%- include('partials/header.ejs'); -%>
+
+
+
+<div class="my-list">
+    <% if (books) { %>
+        <% for (let book of books) { %>
+            <div class="book-item">
+                <img src="<%= book.cover_i %>" alt="<%= book.title %> cover image" class="book-image">
+                <div class="book-details">
+                    <h2 id="title<%= book.result_id %>">
+                        <%= book.title %>
+                    </h2>
+                    <h3>
+                        <%= book.author %>
+                    </h3>
+                    <h4>
+                        <%= book.year %>
+                    </h4>
+                </div>
+                <form class="item" action="/add" method="post">
+                    <button class="add" type="submit" name="list" value=<%=book.result_id %> >+</button>
+                  </form>
+            </div>
+        <% } %>
+    <% } else { %>
+        <h2>No results! </h2>
+    <% } %>
+</div>

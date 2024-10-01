@@ -1,0 +1,54 @@
+<%- include('partials/header.ejs'); -%>
+
+<div class="sort">
+    <h3>Sort by:</h3>
+    <form action="/sort" method="POST">
+        <button class="sort-by-title" type="submit" name="sort" value="title" >Title</button>
+    </form>
+
+    <form action="/sort" method="POST">
+        <button class="sort-by-id" type="submit" name="sort" value="id" >Added</button>
+    </form>
+
+    <form action="/sort" method="POST">
+        <button class="sort-by-id" type="submit" name="sort" value="author" >Author</button>
+    </form>
+
+    <form action="/sort" method="POST">
+        <button class="sort-by-id" type="submit" name="sort" value="year" >Year</button>
+    </form>
+</div>
+
+<div class="my-list">
+    <% if (books) { %>
+        <% for (let book of books) { %>
+            <div class="book-item">
+                <img src="<%= book.cover %>" alt="<%= book.title %> cover image" class="book-image">
+                <div class="book-details">
+                    <h2 id="title<%= book.id %>">
+                        <%= book.title %>
+                    </h2>
+                    <h3>
+                        <%= book.author %>
+                    </h3>
+                    <h4>
+                        <%= book.year %>
+                    </h4>
+                </div>
+
+                <form action="/delete" method="POST">
+                    <input type="hidden" name="book_id" value="<%= book.id %>">
+                    <button type="submit" class="delete-button">Delete</button>
+                </form>
+
+
+            </div>
+        <% } %>
+    <% } else { %>
+        <h2>Search for books and add it to your list!</h2>
+    <% } %>
+</div>
+
+
+
+<%- include('partials/footer.ejs'); -%>

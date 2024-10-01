@@ -1,0 +1,12 @@
+-move navbar to the header V
+
+->>"add to list" button in "/search" V
+
+-"delete from list" button in "/" V
+-style the footer
+-present result by title, year, score 
+-add score to search_results
+-add score to books search_results
+-add score to app.post("/search)
+-push to git this project
+-handle add exist book to list

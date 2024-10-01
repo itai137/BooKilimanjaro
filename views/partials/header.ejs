@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles/main.css" />
+  <title>BookiliManjaro</title>
+</head>
+
+<body>
+  <!-- Navbar Start -->
+  <nav class="navbar">
+    <div class="logo-container">
+        <img src="/assets/bookilimanjaro.png" alt="Bookolimanjaro's logo" class="logo">
+    </div>
+    <ul class="nav-links">
+        <li><a href="/">My List</a></li>
+        <li>Search</li>
+        
+        <li>
+            <form action="/search" method="POST" class="search-form">
+                <input type="text" name="query" placeholder="Search books by title" autocomplete="off" autofocus="true" class="search-input">
+                <button type="submit" class="search-button">🔍</button>
+            </form>
+        </li>
+    </ul>
+</nav>
+  <!-- Navbar End -->
+
+  <main>

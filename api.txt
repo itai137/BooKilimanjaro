@@ -1,0 +1,25 @@
+api:
+
+by book title:
+
+https://openlibrary.org/search.json?title=
+
+
+response.docs[0]["author_name"]
+response.docs[0]["title"]
+
+
+-first_publish_year
+-first_sentence
+-title
+-aurthor
+-cover: la["isbn_NUM] >> 
+NUM on ipa cover:
+https://covers.openlibrary.org/b/isbn/NUM-S.jpg
+https://covers.openlibrary.org/b/isbn/NUM-M.jpg
+https://covers.openlibrary.org/b/isbn/NUM-L.jpg
+
+https://covers.openlibrary.org/b/id/VALUE-L.jpg
+
+by aurthor:
+https://openlibrary.org/search/authors.json?q=
