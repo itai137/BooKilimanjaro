@@ -2,22 +2,14 @@
 
 <div class="sort">
     <h3>Sort by:</h3>
-    <form action="/sort" method="POST">
-        <button class="sort-by-title" type="submit" name="sort" value="title" >Title</button>
-    </form>
-
-    <form action="/sort" method="POST">
-        <button class="sort-by-id" type="submit" name="sort" value="id" >Added</button>
-    </form>
-
-    <form action="/sort" method="POST">
-        <button class="sort-by-id" type="submit" name="sort" value="author" >Author</button>
-    </form>
-
-    <form action="/sort" method="POST">
-        <button class="sort-by-id" type="submit" name="sort" value="year" >Year</button>
+    <form action="/sort" method="POST" class="sort-form">
+        <button class="sort-button" type="submit" name="sort" value="title">Title</button>
+        <button class="sort-button" type="submit" name="sort" value="id">Added</button>
+        <button class="sort-button" type="submit" name="sort" value="author">Author</button>
+        <button class="sort-button" type="submit" name="sort" value="year">Year</button>
     </form>
 </div>
+
 
 <div class="my-list">
     <% if (books) { %>
@@ -38,7 +30,7 @@
 
                 <form action="/delete" method="POST">
                     <input type="hidden" name="book_id" value="<%= book.id %>">
-                    <button type="submit" class="delete-button">Delete</button>
+                    <button type="submit" class="delete-button">Remove</button>
                 </form>
 
 

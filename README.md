@@ -1,4 +1,4 @@
-# book-list-project
+# BooKilimanjaro
 
 📚 BookiliManjaro Project
 

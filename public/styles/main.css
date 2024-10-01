@@ -6,13 +6,24 @@ body, html {
     font-family: Arial, sans-serif;
 }
 
+/* Add padding to main content to make space for the fixed navbar */
+body {
+    padding-top: 120px; /* Adjust the padding to make space for the fixed navbar */
+}
+
 /* Navbar container */
 .navbar {
+    position: fixed; /* Fixes the navbar at the top of the page */
+    top: 0; /* Align it to the top */
+    left: 0; /* Align it to the left edge */
+    width: 100%; /* Make it span the full width of the page */
+    z-index: 1000; /* Set a high z-index so it stays above other elements */
     display: flex;
     align-items: center;
     background-color: #333;
     padding: 10px 20px;
     color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Add shadow for better visual separation */
 }
 
 /* Logo container */
@@ -160,4 +171,51 @@ button.delete-button {
 
 button.delete-button:hover {
     background-color: #c0392b; /* Darker red on hover */
+}
+
+/* Sort Section */
+.sort {
+    margin: 0; /* Remove any default margin */
+    padding: 10px 0; /* Add vertical padding if needed */
+    text-align: center;
+    background-color: #e9877d;
+}
+
+/* Sort Header */
+.sort h3 {
+    font-size: 1.5em;
+    margin: 0; /* Remove default margin to reduce spacing */
+    padding-bottom: 10px; /* Add padding if needed for spacing */
+    color: #333;
+}
+
+/* Sort Form */
+.sort-form {
+    display: inline-flex; /* Display buttons in a row */
+    gap: 10px; /* Space between buttons */
+    margin: 0;
+    padding: 0;
+}
+
+/* Sort Button Styling */
+.sort-button {
+    padding: 10px 20px;
+    font-size: 1em;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.sort-button:hover {
+    background-color: #0056b3;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.sort-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }

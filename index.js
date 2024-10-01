@@ -26,7 +26,7 @@ let books =[];
 app.get("/", async (req, res) => {
     try {
       books = await db.query("SELECT * FROM books");
-      console.log(books.rows);
+      // console.log(books.rows);
       res.render("index.ejs", {
               books: books.rows    
     });
