@@ -25,7 +25,7 @@ app.use(express.static("public"));
 let books =[];
 app.get("/", async (req, res) => {
     try {
-      books = await db.query("SELECT * FROM books");
+      books = await db.query("SELECT * FROM books ORDER BY id DESC");
       // console.log(books.rows);
       res.render("index.ejs", {
               books: books.rows    
@@ -135,7 +135,11 @@ app.get("/", async (req, res) => {
     try {
       const sort_by = req.body.sort;
 
-      books = await db.query(`SELECT * FROM books ORDER BY ${sort_by} ASC`);
+      if (sort_by=="id") { 
+        books = await db.query(`SELECT * FROM books ORDER BY id DESC`);
+      } else{
+        books = await db.query(`SELECT * FROM books ORDER BY ${sort_by} ASC`);
+      }
       
       res.render("index.ejs", {
               books: books.rows    
