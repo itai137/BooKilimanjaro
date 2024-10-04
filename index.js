@@ -37,54 +37,64 @@ app.get("/", async (req, res) => {
     
   });
   
-  app.post("/search", async (req,res)=> {
-    try{
-      //cleaning the results table
+  app.post("/search", async (req, res) => {
+    try {
+      // Cleaning the results table
       await db.query("DELETE FROM search_results");
-
+  
       const input = req.body.query;
       const response = await axios.get(`https://openlibrary.org/search.json?title=${input}`);
       const data = response.data;
-
+  
       if (data.numFound > 0) {
         // Iterate through the top 5 books
         for (let book of data.docs.slice(0, 5)) {
-        
           const title = book.title || 'Unknown Title';
-          const author =  book.author_name ? book.author_name.join(", ") : 'Unknown Author';
-          const cover_i = `https://covers.openlibrary.org/b/id/${book.cover_i}-L.jpg`  || null;
+          const author = book.author_name ? book.author_name.join(", ") : 'Unknown Author';
+          const cover_i = `https://covers.openlibrary.org/b/id/${book.cover_i}-L.jpg` || null;
           const year = book.first_publish_year || null;
           const first_sentence = book.first_sentence ? book.first_sentence[0] : null;
           const rate = book.ratings_average || null;
+          const isbn = book.isbn ? book.isbn[0] : 'Unknown Isbn';
   
           // Insert the book into the search_results table
-         await db.query(
-            `INSERT INTO search_results (title, author, cover_i, year, first_sentence,rate)
-             VALUES ($1, $2, $3, $4, $5, $6)`,
-            [title, author, cover_i, year, first_sentence,rate]
+          await db.query(
+            `INSERT INTO search_results (title, author, cover_i, year, first_sentence, rate, isbn)
+             VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+            [title, author, cover_i, year, first_sentence, rate, isbn]
           );
         }
-
-        const bookResults = await db.query("SELECT * FROM search_results");
+  
+        // Fetch the search results with an additional check for whether they are in the favorite list
+        const bookResults = await db.query(`
+          SELECT sr.*, 
+          CASE 
+            WHEN b.id IS NOT NULL THEN true 
+            ELSE false 
+          END as is_favorite
+          FROM search_results sr
+          LEFT JOIN books b ON sr.isbn = b.isbn
+        `);
+  
         res.render("search.ejs", {
           books: bookResults.rows,
         });
-      } else{
+      } else {
         res.status(404).send("No books found for the given title.");
-       } 
-      
-    } catch(err){
+      }
+    } catch (err) {
       console.error(err);
       res.status(500).send("Something went wrong!");
     }
-  })
+  });
+  
 
   app.post("/add", async (req, res) => {
     try {
       const chosenBookID = req.body.list;
   
       // First, fetch the book from search_results
-      const selectedBook = await db.query("SELECT result_id, title, author, cover_i, rate FROM search_results WHERE result_id = $1", [chosenBookID]);
+      const selectedBook = await db.query("SELECT result_id, title, author, cover_i, rate, isbn FROM search_results WHERE isbn = $1", [chosenBookID]);
   
       if (selectedBook.rows.length === 0) {
         // If the book doesn't exist in the search_results table, send an error response
@@ -94,7 +104,7 @@ app.get("/", async (req, res) => {
       try {
         // Attempt to insert the book into the books table
         await db.query(
-          "INSERT INTO books (id, title, author, cover, year, created_at, first_sentence, rate) SELECT result_id, title, author, cover_i, year, created_at, first_sentence, rate  FROM search_results WHERE result_id = $1",
+          "INSERT INTO books (id, title, author, cover, year, created_at, first_sentence, rate, isbn) SELECT result_id, title, author, cover_i, year, created_at, first_sentence, rate, isbn  FROM search_results WHERE isbn = $1",
           [chosenBookID]
         );
         // If successful, redirect to the home page
@@ -116,7 +126,7 @@ app.get("/", async (req, res) => {
       const bookID = req.body.book_id; // Extract book ID from form
   
       // Delete the book with the given ID
-      const deleteResult = await db.query("DELETE FROM books WHERE id = $1", [bookID]);
+      const deleteResult = await db.query("DELETE FROM books WHERE isbn = $1", [bookID]);
   
       // Check if the row was actually deleted
       if (deleteResult.rowCount > 0) {

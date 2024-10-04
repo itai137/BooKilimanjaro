@@ -20,8 +20,7 @@
                     <div class="star-rating">
                         <% 
                             const fullStars = Math.floor(book.rate);
-                            //const halfStar = (book.rate % 1) >= 0.5 ? 1 : 0;
-                            const emptyStars = 5 - fullStars ;
+                            const emptyStars = 5 - fullStars;
 
                             for (let i = 0; i < fullStars; i++) { 
                         %>
@@ -35,8 +34,10 @@
                     </div>
 
                 </div>
-                <form class="item" action="/add" method="post">
-                    <button class="add" type="submit" name="list" value=<%=book.result_id %> >+</button>
+                <form class="item" action="<%= book.is_favorite ? '/delete' : '/add' %>" method="post">
+                    <button class="add" type="submit" name="<%= book.is_favorite ? 'book_id' : 'list' %>" value="<%= book.isbn %>">
+                        <%= book.is_favorite ? '-' : '+' %>
+                    </button>
                 </form>
             </div>
         <% } %>

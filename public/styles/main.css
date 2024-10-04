@@ -141,18 +141,29 @@ body {
     padding-top: 5px;
 }
 
+/* button .add {
+    min-height: 30px;
+    width: 80px;
+    border-radius: 5px;
+    border: none;
+    background-color: #3c75e7; /* Red color for delete action */
+    /* color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+} */ 
 
 button.add {
-    min-height: 50px;
-    width: 50px;
+    min-height: 30px;
+    width: 40px; 
     border-radius: 50%;
     border-color: transparent;
-    background-color: #a683e3;
-    color: #fff;
-    font-size: 30px;
+    background-color: #dfe5e6;
+    color: #0e1112;
+    font-size: 35px;
     border-width: 0;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
+} 
 
 button.add:hover {
     transform: scale(1.2); /* Expands the button to 1.2 times its size */
