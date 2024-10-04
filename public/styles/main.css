@@ -140,18 +140,7 @@ body {
     color: #555;
     padding-top: 5px;
 }
-
-/* button .add {
-    min-height: 30px;
-    width: 80px;
-    border-radius: 5px;
-    border: none;
-    background-color: #3c75e7; /* Red color for delete action */
-    /* color: #fff;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-} */ 
+ 
 
 button.add {
     min-height: 30px;
@@ -254,4 +243,57 @@ button.delete-button:hover {
     font-size: 1em;             /* Adjust as needed for size */
     margin-left: 10px;          /* Add space between stars and rating value */
     color: #333;                /* Text color for the rating value */
+}
+
+/* Footer Styling */
+.footer {
+    background-color: #333; /* Same dark color as the navbar for consistency */
+    color: white;
+    padding: 20px;
+    text-align: center;
+    position: relative;
+    margin-top: 40px; /* Space above the footer */
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Add shadow for better visual separation from the content */
+}
+
+.footer a {
+    color: #ffa500; /* Orange color matching the navbar hover */
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.footer a:hover {
+    color: #ff8c00; /* Slightly darker orange for hover effect */
+}
+
+.footer .social-icons {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.footer .social-icons a {
+    font-size: 1.5em;
+    color: white;
+    background-color: #555;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.footer .social-icons a:hover {
+    background-color: #ffa500; /* Match hover color with buttons */
+    transform: scale(1.2); /* Expand slightly on hover */
+}
+
+.footer p {
+    margin: 10px 0;
+    font-size: 1em;
+    color: #dfe5e6; /* Light color to match the button text color */
 }
