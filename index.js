@@ -55,12 +55,13 @@ app.get("/", async (req, res) => {
           const cover_i = `https://covers.openlibrary.org/b/id/${book.cover_i}-L.jpg`  || null;
           const year = book.first_publish_year || null;
           const first_sentence = book.first_sentence ? book.first_sentence[0] : null;
+          const rate = book.ratings_average || null;
   
           // Insert the book into the search_results table
          await db.query(
-            `INSERT INTO search_results (title, author, cover_i, year, first_sentence)
-             VALUES ($1, $2, $3, $4, $5)`,
-            [title, author, cover_i, year, first_sentence]
+            `INSERT INTO search_results (title, author, cover_i, year, first_sentence,rate)
+             VALUES ($1, $2, $3, $4, $5, $6)`,
+            [title, author, cover_i, year, first_sentence,rate]
           );
         }
 
@@ -83,7 +84,7 @@ app.get("/", async (req, res) => {
       const chosenBookID = req.body.list;
   
       // First, fetch the book from search_results
-      const selectedBook = await db.query("SELECT result_id, title, author, cover_i FROM search_results WHERE result_id = $1", [chosenBookID]);
+      const selectedBook = await db.query("SELECT result_id, title, author, cover_i, rate FROM search_results WHERE result_id = $1", [chosenBookID]);
   
       if (selectedBook.rows.length === 0) {
         // If the book doesn't exist in the search_results table, send an error response
@@ -93,7 +94,7 @@ app.get("/", async (req, res) => {
       try {
         // Attempt to insert the book into the books table
         await db.query(
-          "INSERT INTO books (id, title, author, cover, year, created_at, first_sentence) SELECT result_id, title, author, cover_i, year, created_at, first_sentence  FROM search_results WHERE result_id = $1",
+          "INSERT INTO books (id, title, author, cover, year, created_at, first_sentence, rate) SELECT result_id, title, author, cover_i, year, created_at, first_sentence, rate  FROM search_results WHERE result_id = $1",
           [chosenBookID]
         );
         // If successful, redirect to the home page

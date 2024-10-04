@@ -1,7 +1,5 @@
 <%- include('partials/header.ejs'); -%>
 
-
-
 <div class="my-list">
     <% if (books) { %>
         <% for (let book of books) { %>
@@ -17,10 +15,29 @@
                     <h4>
                         <%= book.year %>
                     </h4>
+                    
+                    <!-- Adding Star Rating Representation and h5 in the same line -->
+                    <div class="star-rating">
+                        <% 
+                            const fullStars = Math.floor(book.rate);
+                            //const halfStar = (book.rate % 1) >= 0.5 ? 1 : 0;
+                            const emptyStars = 5 - fullStars ;
+
+                            for (let i = 0; i < fullStars; i++) { 
+                        %>
+                            <span class="star">★</span>
+                        <% } %>
+                        
+                        <% for (let i = 0; i < emptyStars; i++) { %>
+                            <span class="star">☆</span>
+                        <% } %>
+                        <h5 class="rating-text"><%= book.rate %> / 5.0</h5> <!-- Move h5 here to be in the same line -->
+                    </div>
+
                 </div>
                 <form class="item" action="/add" method="post">
                     <button class="add" type="submit" name="list" value=<%=book.result_id %> >+</button>
-                  </form>
+                </form>
             </div>
         <% } %>
     <% } else { %>

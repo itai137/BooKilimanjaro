@@ -134,6 +134,13 @@ body {
     color: #555;
 }
 
+.book-details h5 {
+    margin: 0;
+    font-size: 0.9em;
+    color: #555;
+    padding-top: 5px;
+}
+
 
 button.add {
     min-height: 50px;
@@ -218,4 +225,22 @@ button.delete-button:hover {
 .sort-button:active {
     transform: translateY(0);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.star-rating {
+    display: flex;
+    align-items: center;  /* Vertically align stars and rating text */
+}
+
+.star-rating .star {
+    font-size: 1.5em;           /* Adjust as needed for size */
+    color: #ffb400;             /* Gold color for full stars */
+    text-shadow: 0 0 1px #000;  /* Thin blackish border around stars for better distinction */
+    margin-right: 2px;          /* Add spacing between stars */
+}
+
+.star-rating .rating-text {
+    font-size: 1em;             /* Adjust as needed for size */
+    margin-left: 10px;          /* Add space between stars and rating value */
+    color: #333;                /* Text color for the rating value */
 }

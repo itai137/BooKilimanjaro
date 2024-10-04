@@ -7,6 +7,7 @@
         <button class="sort-button" type="submit" name="sort" value="id">Added</button>
         <button class="sort-button" type="submit" name="sort" value="author">Author</button>
         <button class="sort-button" type="submit" name="sort" value="year">Year</button>
+        <button class="sort-button" type="submit" name="sort" value="rate">Rate</button>
     </form>
 </div>
 
@@ -26,6 +27,22 @@
                     <h4>
                         <%= book.year %>
                     </h4>
+                    <div class="star-rating">
+                        <% 
+                            const fullStars = Math.floor(book.rate);
+                            //const halfStar = (book.rate % 1) >= 0.5 ? 1 : 0;
+                            const emptyStars = 5 - fullStars ;
+
+                            for (let i = 0; i < fullStars; i++) { 
+                        %>
+                            <span class="star">★</span>
+                        <% } %>
+                        
+                        <% for (let i = 0; i < emptyStars; i++) { %>
+                            <span class="star">☆</span>
+                        <% } %>
+                        <h5 class="rating-text"><%= book.rate %> / 5.0</h5> <!-- Move h5 here to be in the same line -->
+                    </div>
                 </div>
 
                 <form action="/delete" method="POST">
