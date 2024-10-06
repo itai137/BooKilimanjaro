@@ -297,3 +297,23 @@ button.delete-button:hover {
     font-size: 1em;
     color: #dfe5e6; /* Light color to match the button text color */
 }
+
+/* Loading Spinner Styling */
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 6px solid #f3f3f3; /* Light gray */
+    border-top: 6px solid #333; /* Dark border color matching the theme */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999; /* Ensure it's above other elements */
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

@@ -187,6 +187,8 @@ app.post("/sort", async (req, res) => {
 
     if (sort_by=="id") { 
       books = await db.query(`SELECT * FROM books ORDER BY id DESC`);
+    } else if (sort_by=="rate") { 
+      books = await db.query(`SELECT * FROM books ORDER BY rate DESC`);
     } else{
       books = await db.query(`SELECT * FROM books ORDER BY ${sort_by} ASC`);
     }
