@@ -42,7 +42,7 @@ app.get("/", async (req, res) => {
   
 app.post("/search", async (req, res) => {
   try {
-    if(!isNotMainPage){ //no added items
+    
       // Cleaning the results table
     await db.query("DELETE FROM search_results");
 
@@ -71,7 +71,7 @@ app.post("/search", async (req, res) => {
 
       } else {
           res.status(404).send("No books found for the given title.");
-      }};
+      };
 
       
       // Fetch the search results with an additional check for whether they are in the favorite list
