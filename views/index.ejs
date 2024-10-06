@@ -18,7 +18,7 @@
             <div class="book-item">
                 <img src="<%= book.cover %>" alt="<%= book.title %> cover image" class="book-image">
                 <div class="book-details">
-                    <h2 id="title<%= book.id %>">
+                    <h2 id="title<%= book.isbn %>">
                         <%= book.title %>
                     </h2>
                     <h3>
@@ -46,7 +46,7 @@
                 </div>
 
                 <form action="/delete" method="POST">
-                    <input type="hidden" name="book_id" value="<%= book.id %>">
+                    <input type="hidden" name="book_id" value="<%= book.isbn %>">
                     <button type="submit" class="delete-button">Remove</button>
                 </form>
 
