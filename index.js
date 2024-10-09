@@ -2,21 +2,37 @@ import express, { query } from "express";
 import bodyParser from "body-parser";
 import axios from "axios";
 import pg from "pg";
+import passport from "passport";
+import { Strategy } from "passport-local";
+import session from "express-session";
+import env from "dotenv";
+
+
+
+const app = express();
+const port = 3000; 
+env.config();
+
+
+app.use(
+  session({
+    secret: "TOPSECRETCAPSTONEBOOK",
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static("public"));
 
 const db = new pg.Client({
-  user: "postgres",
-  host: "localhost",
-  database: "capstone-books",
-  password: "Aa123456",
-  port: 5432,
+  user: process.env.PG_USER,
+  host: process.env.PG_HOST,
+  database: process.env.PG_DATABASE,
+  password: process.env.PG_PASSWORD,
+  port: process.env.PG_PORT,
 });
 
 db.connect();
-const app = express();
-const port = 3000; 
-
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static("public"));
 
 // let books =[
 //   { id: 1, title: "Eat That Frog!", author: "Brian Tracy", cover: "https://covers.openlibrary.org/b/isbn/9785961411386-L.jpg"},
@@ -24,6 +40,7 @@ app.use(express.static("public"));
 // ];
 let books =[];
 let isNotMainPage = 0;
+
 app.get("/", async (req, res) => {
   isNotMainPage = 0;
     try {
