@@ -1,0 +1,18 @@
+<%- include('partials/header.ejs'); -%>
+<div class="loading-spinner" id="loadingSpinner" style="display: none;"></div>
+
+
+
+<div class="my-list">
+    <h1>Home page</h1>
+</div>
+
+
+
+<script>
+    document.querySelector('.search-form').addEventListener('submit', function() {
+      document.getElementById('loadingSpinner').style.display = 'block';
+      
+    });
+  </script>
+<%- include('partials/footer.ejs'); -%>
