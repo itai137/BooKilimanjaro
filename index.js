@@ -47,15 +47,19 @@ let books =[];
 let isNotMainPage = 0;
 
 app.get("/", (req, res) => {
-  res.render("home.ejs");
+  res.render("home.ejs",
+    { isAuthenticated: req.isAuthenticated() }
+  );
 });
 
 app.get("/login", (req, res) => {
-  res.render("login.ejs");
+  res.render("login.ejs",
+    { isAuthenticated: req.isAuthenticated() });
 });
 
 app.get("/register", (req, res) => {
-  res.render("register.ejs");
+  res.render("register.ejs",
+    { isAuthenticated: req.isAuthenticated() });
 });
 
 app.get(
@@ -76,7 +80,8 @@ app.get(
 app.get("/logout", (req, res) => {
   req.logout((err)=> {
     if(err) console.log(err);
-    res.redirect("/");
+    res.render("home.ejs",
+      { isAuthenticated: req.isAuthenticated() });
   });
   
 });
@@ -93,7 +98,8 @@ app.get("/list", async (req, res) => {
         [req.user.username]);
       //console.log(books.rows);
       res.render("index.ejs", {
-              books: books.rows    
+              books: books.rows,
+              isAuthenticated: req.isAuthenticated(),    
     });
     }catch (err) {
       console.error(err);
@@ -120,6 +126,7 @@ app.get("/list", async (req, res) => {
   
       res.render("search.ejs", {
         books: bookResults.rows,
+         isAuthenticated: req.isAuthenticated() ,
       });
     } catch (err) {
       console.error("Error fetching search results:", err);
@@ -148,7 +155,8 @@ app.post("/register", async (req, res) => {
     ]);
 
     if (checkResult.rows.length > 0) {
-      req.redirect("/login");
+      res.render("login.ejs",
+        { isAuthenticated: req.isAuthenticated() }); //and alerts user is already exist
     } else {
       bcrypt.hash(password, saltRounds, async (err, hash) => {
         if (err) {
@@ -161,7 +169,8 @@ app.post("/register", async (req, res) => {
           const user = result.rows[0];
           req.login(user, (err) => {
             console.log("success");
-            res.redirect("/list");
+            res.render("index.ejs",
+              { isAuthenticated: req.isAuthenticated() });
           });
         }
       });
@@ -219,6 +228,7 @@ app.post("/search", async (req, res) => {
 
       res.render("search.ejs", {
         books: bookResults.rows,
+         isAuthenticated: req.isAuthenticated(),
       });
     
     
@@ -306,7 +316,8 @@ app.post("/sort", async (req, res) => {
     }
     
     res.render("index.ejs", {
-            books: books.rows    
+            books: books.rows,
+             isAuthenticated: req.isAuthenticated(),    
   });
   }catch (err) {
     console.error(err);

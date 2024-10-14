@@ -16,27 +16,36 @@
   <!-- Navbar Start -->
   <nav class="navbar">
     <div class="logo-container">
-      <a href="/">
-        <img src="/assets/bookilimanjaro.png" alt="Bookolimanjaro's logo" class="logo">
-      </a>
-        
+        <a href="/">
+            <img src="/assets/bookilimanjaro.png" alt="Bookolimanjaro's logo" class="logo">
+        </a>
     </div>
-    <ul class="nav-links">
-        <li><a href="/list">My List</a></li>
-        <li>Search</li>
-        
-        <li>
-            <form action="/search" method="POST" class="search-form">
-                <input type="text" name="query" placeholder="Search books by title" autocomplete="off" autofocus="true" class="search-input">
-                <button type="submit" class="search-button">🔍</button>
-            </form>
-        </li>
-        <li>
-          <a class="btn btn-light btn-lg" href="/register" role="button">Register</a>
+    
+    <!-- Left section: My List and Search Bar -->
+    <div class="nav-left">
+        <ul>
+            <li><a href="/list">My List</a></li>
+            <li>
+                <form action="/search" method="POST" class="search-form">
+                    <input type="text" name="query" placeholder="Search books by title" autocomplete="off" autofocus="true" class="search-input">
+                    <button type="submit" class="search-button">🔍</button>
+                </form>
+            </li>
+        </ul>
+    </div>
+    
+    <!-- Right section: Register and Login buttons -->
+    <div class="nav-right">
+      <% if (isAuthenticated) { %>
+          <a class="btn btn-secondary btn-lg" href="/logout" role="button">Logout</a>
+      <% } else { %>
+          <a class="btn btn-secondary btn-lg" href="/register" role="button">Register</a>
           <a class="btn btn-dark btn-lg" href="/login" role="button">Login</a>
-        </li>
-    </ul>
+      <% } %>
+  </div>
+  
 </nav>
+
   <!-- Navbar End -->
 
   <main>
