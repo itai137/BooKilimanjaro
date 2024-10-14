@@ -2,8 +2,10 @@ import express, { query } from "express";
 import bodyParser from "body-parser";
 import axios from "axios";
 import pg from "pg";
+import bcrypt from "bcrypt";
 import passport from "passport";
 import { Strategy } from "passport-local";
+import GoogleStrategy from "passport-google-oauth2";
 import session from "express-session";
 import env from "dotenv";
 
@@ -11,18 +13,22 @@ import env from "dotenv";
 
 const app = express();
 const port = 3000; 
+const saltRounds = 10;
 env.config();
 
 
 app.use(
   session({
-    secret: "TOPSECRETCAPSTONEBOOK",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
   })
 );
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 const db = new pg.Client({
   user: process.env.PG_USER,
@@ -31,7 +37,6 @@ const db = new pg.Client({
   password: process.env.PG_PASSWORD,
   port: process.env.PG_PORT,
 });
-
 db.connect();
 
 // let books =[
@@ -41,12 +46,52 @@ db.connect();
 let books =[];
 let isNotMainPage = 0;
 
-app.get("/", async (req, res) => {
-  isNotMainPage = 0;
+app.get("/", (req, res) => {
+  res.render("home.ejs");
+});
+
+app.get("/login", (req, res) => {
+  res.render("login.ejs");
+});
+
+app.get("/register", (req, res) => {
+  res.render("register.ejs");
+});
+
+app.get(
+  "/auth/google",
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
+  })
+);
+
+app.get(
+  "/auth/google/list",
+  passport.authenticate("google", {
+    successRedirect: "/list",
+    failureRedirect: "/login",
+  })
+);
+
+app.get("/logout", (req, res) => {
+  req.logout((err)=> {
+    if(err) console.log(err);
+    res.redirect("/");
+  });
+  
+});
+
+
+
+
+app.get("/list", async (req, res) => {
+  if (req.isAuthenticated()) {
+    isNotMainPage = 0;
     try {
       
-      books = await db.query("SELECT * FROM books ORDER BY id DESC");
-      // console.log(books.rows);
+      books = await db.query("SELECT * FROM books WHERE username = $1 ORDER BY id DESC",
+        [req.user.username]);
+      //console.log(books.rows);
       res.render("index.ejs", {
               books: books.rows    
     });
@@ -54,9 +99,79 @@ app.get("/", async (req, res) => {
       console.error(err);
       
     }
-    
+  } else {
+    res.redirect("/login");
+  }
   });
   
+
+  app.get("/search", async (req, res) => {
+    try {
+      // Fetch the current search results from the `search_results` table
+      const bookResults = await db.query(`
+        SELECT sr.*, 
+        CASE 
+          WHEN b.id IS NOT NULL THEN true 
+          ELSE false 
+        END as is_favorite
+        FROM search_results sr
+        LEFT JOIN books b ON sr.isbn = b.isbn
+      `);
+  
+      res.render("search.ejs", {
+        books: bookResults.rows,
+      });
+    } catch (err) {
+      console.error("Error fetching search results:", err);
+      res.status(500).send("Something went wrong while fetching the search results.");
+    }
+  });
+
+
+//-------app.post-------------
+
+app.post(
+  "/login",
+  passport.authenticate("local", {
+    successRedirect: "/list",
+    failureRedirect: "/login",
+  })
+);
+
+app.post("/register", async (req, res) => {
+  const email = req.body.username;
+  const password = req.body.password;
+
+  try {
+    const checkResult = await db.query("SELECT * FROM users WHERE username = $1", [
+      email,
+    ]);
+
+    if (checkResult.rows.length > 0) {
+      req.redirect("/login");
+    } else {
+      bcrypt.hash(password, saltRounds, async (err, hash) => {
+        if (err) {
+          console.error("Error hashing password:", err);
+        } else {
+          const result = await db.query(
+            "INSERT INTO users (username, password) VALUES ($1, $2) RETURNING *",
+            [email, hash]
+          );
+          const user = result.rows[0];
+          req.login(user, (err) => {
+            console.log("success");
+            res.redirect("/list");
+          });
+        }
+      });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+
 app.post("/search", async (req, res) => {
   try {
     
@@ -115,27 +230,7 @@ app.post("/search", async (req, res) => {
 });
   
 
-app.get("/search", async (req, res) => {
-  try {
-    // Fetch the current search results from the `search_results` table
-    const bookResults = await db.query(`
-      SELECT sr.*, 
-      CASE 
-        WHEN b.id IS NOT NULL THEN true 
-        ELSE false 
-      END as is_favorite
-      FROM search_results sr
-      LEFT JOIN books b ON sr.isbn = b.isbn
-    `);
 
-    res.render("search.ejs", {
-      books: bookResults.rows,
-    });
-  } catch (err) {
-    console.error("Error fetching search results:", err);
-    res.status(500).send("Something went wrong while fetching the search results.");
-  }
-});
 
 
 app.post("/add", async (req, res) => {
@@ -203,11 +298,11 @@ app.post("/sort", async (req, res) => {
     const sort_by = req.body.sort;
 
     if (sort_by=="id") { 
-      books = await db.query(`SELECT * FROM books ORDER BY id DESC`);
+      books = await db.query(`SELECT * FROM books WHERE username = $1 ORDER BY id DESC`,[req.user.username]);
     } else if (sort_by=="rate") { 
-      books = await db.query(`SELECT * FROM books ORDER BY rate DESC`);
+      books = await db.query(`SELECT * FROM books WHERE username = $1 ORDER BY rate DESC`,[req.user.username]);
     } else{
-      books = await db.query(`SELECT * FROM books ORDER BY ${sort_by} ASC`);
+      books = await db.query(`SELECT * FROM books WHERE username = $1 ORDER BY ${sort_by} ASC`,[req.user.username]);
     }
     
     res.render("index.ejs", {
@@ -220,6 +315,78 @@ app.post("/sort", async (req, res) => {
   
 });
 
+
+//---------passport-----------
+
+passport.use(
+  "local",
+  new Strategy(async function verify(username, password, cb) {
+    try {
+      const result = await db.query("SELECT * FROM users WHERE username = $1 ", [
+        username,
+      ]);
+      if (result.rows.length > 0) {
+        const user = result.rows[0];
+        const storedHashedPassword = user.password;
+        bcrypt.compare(password, storedHashedPassword, (err, valid) => {
+          if (err) {
+            console.error("Error comparing passwords:", err);
+            return cb(err);
+          } else {
+            if (valid) {
+              return cb(null, user);
+            } else {
+              return cb(null, false);
+            }
+          }
+        });
+      } else {
+        return cb("User not found");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  })
+);
+
+
+passport.use(
+  "google",
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: "http://localhost:3000/auth/google/list",
+      userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
+    },
+    async (accessToken, refreshToken, profile, cb) => {
+      try {
+        console.log(profile);
+        const result = await db.query("SELECT * FROM users WHERE username = $1", [
+          profile.email,
+        ]);
+        if (result.rows.length === 0) {
+          const newUser = await db.query(
+            "INSERT INTO users (username, password) VALUES ($1, $2)",
+            [profile.email, "google"]
+          );
+          return cb(null, newUser.rows[0]);
+        } else {
+          return cb(null, result.rows[0]);
+        }
+      } catch (err) {
+        return cb(err);
+      }
+    }
+  )
+);
+passport.serializeUser((user, cb) => {
+  cb(null, user);
+});
+
+passport.deserializeUser((user, cb) => {
+  cb(null, user);
+});
 
 
 
