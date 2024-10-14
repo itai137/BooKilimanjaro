@@ -8,83 +8,119 @@ body, html {
 
 /* Add padding to main content to make space for the fixed navbar */
 body {
-    padding-top: 120px; /* Adjust the padding to make space for the fixed navbar */
+    padding-top: 120px;
 }
 
 /* Navbar container */
 .navbar {
-    position: fixed; /* Fixes the navbar at the top of the page */
-    top: 0; /* Align it to the top */
-    left: 0; /* Align it to the left edge */
-    width: 100%; /* Make it span the full width of the page */
-    z-index: 1000; /* Set a high z-index so it stays above other elements */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
     display: flex;
-    align-items: center;
+    align-items: center; /* Align items inline */
+    justify-content: space-between;
     background-color: #333;
     padding: 10px 20px;
     color: white;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Add shadow for better visual separation */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 /* Logo container */
-.logo {
-    height: 100px;
-    width: 120%;
-    border-radius: 20%;
-}
-
-/* Navigation links */
-.nav-links {
-    font-size: xx-large;
-    list-style: none;
+.logo-container {
     display: flex;
-    align-items: center; /* Ensure items like the search form align properly */
-    gap: 20px;
+    align-items: center;
 }
 
-.nav-links li {
-    display: inline;
+.logo {
+    height: 80px; /* Adjust logo height */
+    width: auto;
+    border-radius: 20%;
+    margin-right: 20px; /* Add spacing between logo and nav items */
 }
 
-.nav-links a {
+/* Left section: "My List" and search bar inline with logo */
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Space between items */
+    flex-grow: 1; /* Make it grow to take available space */
+}
+
+.nav-left ul {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-left li {
+    margin-right: 20px;
+}
+
+.nav-left a {
     text-decoration: none;
     color: white;
+    font-size: 1.8em; /* Adjust size for readability */
     transition: color 0.3s;
 }
 
-.nav-links a:hover {
-    color: #ffa500; /* Orange color for hover */
+.nav-left a:hover {
+    color: #ffa500;
 }
 
-/* Search form styling */
+/* Search form */
 .search-form {
     display: flex;
     align-items: center;
 }
 
 .search-input {
-    padding: 5px;
+    padding: 5px 10px;
     border: none;
     border-radius: 4px 0 0 4px;
     outline: none;
-    font-size: medium; /* Ensure consistent size with the rest of the navbar */
+    font-size: 1em;
 }
 
 .search-button {
-    padding: 5px 10px;
+    padding: 6px 12px;
     border: none;
     background-color: #ffa500;
     color: white;
     border-radius: 0 4px 4px 0;
     cursor: pointer;
+    font-size: 1.2em; /* Adjust size of the search icon */
     transition: background-color 0.3s;
 }
 
 .search-button:hover {
-    background-color: #ff8c00; /* Slightly darker orange */
+    background-color: #ff8c00;
 }
 
-/* My-list section styling for better presentation */
+/* Right section: Register and Login buttons */
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.nav-right a {
+    text-decoration: none;
+    color: white;
+    padding: 10px 20px;
+    background-color: #007bff;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.nav-right a:hover {
+    background-color: #0056b3;
+}
+
+/* My-list section styling */
 .my-list {
     padding: 20px;
     background-color: #e6c6a8;
@@ -141,7 +177,7 @@ body {
     padding-top: 5px;
 }
  
-
+/* Add book button */
 button.add {
     min-height: 30px;
     width: 40px; 
@@ -160,9 +196,11 @@ button.add:hover {
 }
 
 .book-item img:hover {
-    transform: scale(1.2); /* Expands the button to 1.2 times its size */
-    box-shadow: 0 0 15px rgba(214, 146, 117, 0.7); /* Adds a glowing effect */
+    transform: scale(1.2);
+    box-shadow: 0 0 15px rgba(214, 146, 117, 0.7);
 }
+
+/* Delete book button */
 button.delete-button {
     min-height: 30px;
     width: 80px;
@@ -173,7 +211,6 @@ button.delete-button {
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    
 }
 
 button.delete-button:hover {
@@ -182,8 +219,8 @@ button.delete-button:hover {
 
 /* Sort Section */
 .sort {
-    margin: 0; /* Remove any default margin */
-    padding: 10px 0; /* Add vertical padding if needed */
+    margin: 0;
+    padding: 10px 0;
     text-align: center;
     background-color: #e9877d;
 }
@@ -191,15 +228,15 @@ button.delete-button:hover {
 /* Sort Header */
 .sort h3 {
     font-size: 1.5em;
-    margin: 0; /* Remove default margin to reduce spacing */
-    padding-bottom: 10px; /* Add padding if needed for spacing */
+    margin: 0;
+    padding-bottom: 10px;
     color: #333;
 }
 
 /* Sort Form */
 .sort-form {
-    display: inline-flex; /* Display buttons in a row */
-    gap: 10px; /* Space between buttons */
+    display: inline-flex;
+    gap: 10px;
     margin: 0;
     padding: 0;
 }
@@ -227,44 +264,45 @@ button.delete-button:hover {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+/* Star Rating */
 .star-rating {
     display: flex;
-    align-items: center;  /* Vertically align stars and rating text */
+    align-items: center;
 }
 
 .star-rating .star {
-    font-size: 1.5em;           /* Adjust as needed for size */
-    color: #ffb400;             /* Gold color for full stars */
-    text-shadow: 0 0 1px #000;  /* Thin blackish border around stars for better distinction */
-    margin-right: 2px;          /* Add spacing between stars */
+    font-size: 1.5em;
+    color: #ffb400;
+    text-shadow: 0 0 1px #000;
+    margin-right: 2px;
 }
 
 .star-rating .rating-text {
-    font-size: 1em;             /* Adjust as needed for size */
-    margin-left: 10px;          /* Add space between stars and rating value */
-    color: #333;                /* Text color for the rating value */
+    font-size: 1em;
+    margin-left: 10px;
+    color: #333;
 }
 
 /* Footer Styling */
 .footer {
-    background-color: #333; /* Same dark color as the navbar for consistency */
+    background-color: #333;
     color: white;
     padding: 20px;
     text-align: center;
     position: relative;
-    margin-top: 40px; /* Space above the footer */
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Add shadow for better visual separation from the content */
+    margin-top: 40px;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .footer a {
-    color: #ffa500; /* Orange color matching the navbar hover */
+    color: #ffa500;
     text-decoration: none;
     font-weight: bold;
     transition: color 0.3s ease;
 }
 
 .footer a:hover {
-    color: #ff8c00; /* Slightly darker orange for hover effect */
+    color: #ff8c00;
 }
 
 .footer .social-icons {
@@ -288,35 +326,32 @@ button.delete-button:hover {
 }
 
 .footer .social-icons a:hover {
-    background-color: #ffa500; /* Match hover color with buttons */
-    transform: scale(1.2); /* Expand slightly on hover */
+    background-color: #ffa500;
+    transform: scale(1.2);
 }
 
 .footer p {
     margin: 10px 0;
     font-size: 1em;
-    color: #dfe5e6; /* Light color to match the button text color */
+    color: #dfe5e6;
 }
 
-/* Loading Spinner Styling */
+/* Loading Spinner */
 .loading-spinner {
     width: 50px;
     height: 50px;
-    border: 6px solid #f3f3f3; /* Light gray */
-    border-top: 6px solid #333; /* Dark border color matching the theme */
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid #333;
     border-radius: 50%;
     animation: spin 1s linear infinite;
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    z-index: 9999; /* Ensure it's above other elements */
+    z-index: 9999;
 }
 
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
-
-
-
